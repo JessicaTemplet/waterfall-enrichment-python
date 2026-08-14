@@ -3,11 +3,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Supports SQLite (default, zero-config) and PostgreSQL.
-# Set DATABASE_URL in your environment for production:
-#   sqlite:///leadintel.db                          (local dev, relative path)
-#   sqlite:////absolute/path/leadintel.db
-#   postgresql+psycopg://user:pass@host:5432/dbname
+# Defaults to local SQLite; set DATABASE_URL (e.g. postgresql+psycopg://...) for production.
 DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///leadintel.db")
 
 # SQLite needs check_same_thread=False for multi-threaded use (the job worker).
