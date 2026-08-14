@@ -1,11 +1,7 @@
 import os
 import redis
 
-# A single REDIS_URL covers host, port, password, and DB index.
-# Examples:
-#   redis://localhost:6379
-#   redis://:mypassword@redis-host:6379/0
-#   rediss://...  (TLS)
+# Override via env var for a non-local Redis (auth, TLS via rediss://, etc.).
 REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
 
 def get_redis_client() -> redis.Redis:
