@@ -124,7 +124,6 @@ class IdempotencyLayer:
         def decorator(func):
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
-                # Track start time for metrics
                 start_time = time.time()
                 
                 # 1. Generate idempotency key
@@ -139,12 +138,10 @@ class IdempotencyLayer:
                         kwargs.get('idempotency-key')
                     )
                 
-                # If no idempotency key provided, execute normally
                 if not key_parts:
                     self._monitor('no_key', function=func.__name__)
                     return func(*args, **kwargs)
                 
-                # Generate Redis key
                 redis_key = self._generate_key(key_parts)
                 
                 # 2. Atomic check-and-set with Lua script for safety
@@ -225,7 +222,6 @@ class IdempotencyLayer:
                             error=str(e)
                         )
                         
-                        # Re-raise the original exception
                         raise e
                 
                 elif result[0] == IdempotencyStatus.STARTED.value:
