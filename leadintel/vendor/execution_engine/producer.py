@@ -13,16 +13,14 @@ class JobProducer:
         job_data = {
             "id": job_id,
             "func": func_name,
-            "args": json.dumps(args or []),  # Serialize to JSON
+            "args": json.dumps(args or []),
             "retries_left": retries,
             "max_retries": retries,
             "status": "queued",
             "created_at": time.time()
         }
         
-        # Store metadata
         self.r.hset(f"job:{job_id}", mapping=job_data)
-        # Push to main queue
         self.r.lpush("default_queue", job_id)
         
         print(f"[+] Enqueued: {func_name} ({job_id})")
