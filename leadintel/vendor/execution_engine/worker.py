@@ -79,7 +79,6 @@ class Worker:
             self.r.hset(job_key, "retries_left", str(retries - 1))
             self.r.hset(job_key, "status", "scheduled")
             
-            # Add to retry set with timestamp
             retry_time = time.time() + delay
             self.r.zadd(self.retry_set, {job_id: retry_time})
             
