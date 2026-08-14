@@ -21,13 +21,9 @@ def run_scheduler():
                     print(f"[->] Re-queueing job: {job_id}")
                     pipe = r.pipeline()
                     
-                    # Remove from processing queue
                     pipe.lrem(processing_queue, 1, job_id)
-                    # Add back to main queue
                     pipe.lpush("default_queue", job_id)
-                    # Remove from retry set
                     pipe.zrem("retry_set", job_id)
-                    # Update status back to queued
                     pipe.hset(f"job:{job_id}", "status", "queued")
                     
                     pipe.execute()
